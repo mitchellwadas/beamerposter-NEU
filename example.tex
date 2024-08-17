@@ -1,0 +1,71 @@
+% will likely need to compile with LuaLaTex
+\documentclass{beamer}
+
+% sizes are in cm and correspond to 24x36in
+\usepackage[orientation=landscape,size=custom,width=91.44,height=60.96]{beamerposter}
+\usepackage{lipsum}
+
+\usetheme{NEU}
+\addbibresource{references.bib}
+
+\title{Math Poster Title}
+\author{Author 1, Author 2}
+\institute{Advised by Advisor}
+
+\lfooter{Conference Name}
+\cfooter{Poster Title}
+\rfooter{Date of Presentation}
+
+\logoleft{\includegraphics[height=4.6cm]{imgs/NEU.png}}
+\logoright{\includegraphics[height=5.2cm]{imgs/Lux.png}}
+
+\begin{document}
+\begin{frame}[t]
+
+    \begin{columns}[t]
+    \separatorcolumn
+    
+    \begin{column}{\smallwidth}
+        \begin{block}{Introduction}
+            \lipsum[2]
+        \end{block}
+        \begin{block}{Background}
+            \lipsum[1]
+        \end{block}
+    \end{column}
+
+    \separatorcolumn
+
+    \begin{column}{\largewidth}
+        \begin{block}{Section}
+            \lipsum[3]
+        \end{block}
+        \begin{framedblock}{Important Section}
+            \lipsum[4]
+            \begin{center}
+                \begin{figure}
+                    \includegraphics[width=0.9\textwidth]{imgs/hilbert-curve.pdf}
+                    \caption{Example figure, courtesy of \url{https://texample.net/tikz/examples/area/mathematics/}.}
+                \end{figure}
+            \end{center}
+            \lipsum[5]
+        \end{framedblock}
+    \end{column}
+
+    \separatorcolumn
+
+    \begin{column}{\smallwidth}
+        \begin{block}{Future Work}
+            \lipsum[6]
+        \end{block}
+        \begin{block}{References}
+            \nocite{*}
+            \printbibliography
+        \end{block}
+    \end{column}
+
+    \separatorcolumn
+    \end{columns}
+
+\end{frame}
+\end{document}

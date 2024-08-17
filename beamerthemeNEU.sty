@@ -1,0 +1,203 @@
+% Adapted from https://github.com/anishathalye/gemini
+\RequirePackage[framemethod=TikZ]{mdframed}
+\RequirePackage[maxbibnames=4]{biblatex}
+\RequirePackage{changepage}
+\RequirePackage{ragged2e}
+\RequirePackage{fontspec}
+\RequirePackage{etoolbox}
+\RequirePackage{ifthen}
+\RequirePackage{calc}
+
+% Colors (cf. https://brand.northeastern.edu/visual-design/color/)
+\definecolor{NEU}{RGB}{200, 16, 46}
+
+% Figure n: 
+\setbeamercolor{caption name}{fg=NEU}
+
+% Headline
+\setbeamercolor{headline}{fg=white,bg=NEU}
+
+% Block
+\setbeamercolor{block title}{fg=NEU, bg=white}
+\setbeamercolor{block body}{fg=black, bg=white}
+
+% Alert Block
+\setbeamercolor{block alerted title}{fg=NEU, bg=gray}
+\setbeamercolor{block alerted body}{fg=black, bg=gray}
+
+% Bibliography
+\renewcommand{\bibfont}{\small}
+\setbeamercolor{bibliography item}{fg=black}
+\setbeamercolor{bibliography entry note}{fg=black}
+\setbeamercolor{bibliography entry author}{fg=black}
+\setlength\bibitemsep{0.1\itemsep}
+
+% Font (cf. https://brand.northeastern.edu/visual-design/typography/)
+\newfontfamily{\Lato}[Ligatures=TeX]{Lato}
+\usefonttheme{professionalfonts}
+\setsansfont{Lato}[
+    UprightFont=*-Light,
+    BoldFont=*-Regular,
+    ItalicFont=*-LightItalic,
+    BoldItalicFont=*-Italic,
+]
+
+% Headline Font
+\setbeamerfont{headline}{family=\Lato}
+\setbeamerfont{headline author}{size=\Large}
+\setbeamerfont{headline institute}{size=\large}
+\setbeamerfont{headline title}{size=\Huge,series=\bfseries}
+
+% Misc. Fonts
+\setbeamerfont{caption}{size=\small}
+\setbeamerfont{footline}{family=\Lato,size=\normalsize}
+\setbeamerfont{block title}{family=\Lato,size=\large,series=\bfseries}
+
+% Caption
+\setbeamertemplate{caption}[numbered]
+
+% Navigation
+\beamertemplatenavigationsymbolsempty
+
+% Columns (Designed for 3 Columns)
+\newlength{\sepwidth}
+\newlength{\smallwidth}
+\newlength{\largewidth}
+\setlength{\sepwidth}{0.020\paperwidth}
+\setlength{\smallwidth}{0.26\paperwidth}
+\setlength{\largewidth}{0.40\paperwidth}
+\newcommand{\separatorcolumn}{\begin{column}{\sepwidth}\end{column}}
+
+% Logos
+\newlength{\maxlogowidth}
+\setlength{\maxlogowidth}{0cm}
+\newlength{\logoleftwidth}
+\setlength{\logoleftwidth}{0cm}
+\newlength{\logorightwidth}
+\setlength{\logorightwidth}{0cm}
+
+\newcommand{\logoleft}[1] {
+    \newcommand{\insertlogoleft}{#1}
+    \settowidth{\logoleftwidth}{\insertlogoleft}
+    \addtolength{\logoleftwidth}{15ex}
+    \setlength{\maxlogowidth}{\maxof{\logoleftwidth}{\logorightwidth}}
+}
+\newcommand{\logoright}[1] {
+    \newcommand{\insertlogoright}{#1}
+    \settowidth{\logorightwidth}{\insertlogoright}
+    \addtolength{\logorightwidth}{15ex}
+    \setlength{\maxlogowidth}{\maxof{\logoleftwidth}{\logorightwidth}}
+}
+
+% Headline
+\setbeamertemplate{headline} {
+    \begin{beamercolorbox}{headline}
+        \begin{columns}
+            \begin{column}{\maxlogowidth}
+                \ifdefined\insertlogoleft
+                \raggedright
+                \hspace{15ex}
+                \insertlogoleft
+                \else\fi
+            \end{column}
+            \begin{column}{\dimexpr\paperwidth-\maxlogowidth-\maxlogowidth}
+                \usebeamerfont{headline}
+                \centering
+                {\\}
+                {\usebeamerfont{headline title}\usebeamercolor[fg]{headline title}\inserttitle\\[.4ex]}
+                {\usebeamerfont{headline author}\usebeamercolor[fg]{headline author}\insertauthor\\[1.25ex]}
+                {\usebeamerfont{headline institute}\usebeamercolor[fg]{headline institute}\insertinstitute}
+                {\vspace{2ex}}
+            \end{column}
+            \begin{column}{\maxlogowidth}
+                \ifdefined\insertlogoright
+                \raggedleft
+                \insertlogoright
+                \hspace{15ex}
+                \else\fi
+            \end{column}
+        \end{columns}
+    \end{beamercolorbox}
+}
+
+% Footer
+\newboolean{insertfooter}
+\setboolean{insertfooter}{false}
+
+\newcommand{\insertlfooter}{}
+\newcommand{\insertcfooter}{}
+\newcommand{\insertrfooter}{}
+
+\newcommand{\lfooter}[1] {
+    \renewcommand{\insertlfooter}{#1}
+    \setboolean{insertfooter}{true}
+}
+\newcommand{\cfooter}[1] {
+    \renewcommand{\insertcfooter}{#1}
+    \setboolean{insertfooter}{true}
+}
+\newcommand{\rfooter}[1] {
+    \renewcommand{\insertrfooter}{#1}
+    \setboolean{insertfooter}{true}
+}
+
+\setbeamertemplate{footline} {
+    \ifthenelse{\boolean{insertfooter}} {
+        \begin{beamercolorbox}[vmode]{headline}
+            \vspace{1ex}
+            \usebeamerfont{footline}
+            \makebox[\sepwidth]{}
+            \makebox[\smallwidth][c]{\insertlfooter}
+            \makebox[\sepwidth]{}
+            \makebox[\largewidth][c]{\insertcfooter}
+            \makebox[\sepwidth]{}
+            \makebox[\smallwidth][c]{\insertrfooter}
+            \makebox[\sepwidth]{}
+            \vspace{-1ex}
+        \end{beamercolorbox}
+    }{}
+}
+
+
+% Block
+\setbeamertemplate{block begin} {
+    \begin{beamercolorbox}[center,sep=1ex]{block title}
+        \usebeamerfont{block title}
+        \insertblocktitle
+    \end{beamercolorbox}
+    \hrule
+    \begin{beamercolorbox}{block body}
+    \usebeamerfont{block body}
+    \setlength{\parskip}{1ex}
+    \\ \justifying
+}
+\setbeamertemplate{block end} {
+    \end{beamercolorbox}
+    \vspace{1ex}
+}
+
+% Framed Block
+\mdfsetup{
+   middlelinecolor=NEU,
+   middlelinewidth=3pt,
+   roundcorner=15pt
+}
+
+\newenvironment{framedblock}[1]{%
+    \begin{mdframed}
+    \begin{beamercolorbox}[center,sep=1ex]{block title}
+        \usebeamerfont{block title} #1
+    \end{beamercolorbox}
+    \hrule
+    \begin{beamercolorbox}{block body}
+    \begin{adjustwidth}{6pt}{6pt}
+    \usebeamerfont{block body}
+    \setlength{\parskip}{1ex}
+    \justifying \vspace{-1ex}
+}{  
+    \end{adjustwidth}
+    \vspace{1ex}
+    \end{beamercolorbox}
+    \end{mdframed}
+    \vspace{1ex}
+}
